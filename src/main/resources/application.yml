@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: escapehub
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/escapehub}
+    username: ${DB_USER:escapehub}
+    password: ${DB_PASSWORD:escapehub}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # το σχήμα το διαχειρίζεται μόνο το Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+    git:
+      mode: simple
+    java:
+      enabled: true
+
+info:
+  app:
+    name: EscapeHub
+    description: Πλατφόρμα συνεργατικών αποστολών μυστηρίου με ανοιχτά δεδομένα

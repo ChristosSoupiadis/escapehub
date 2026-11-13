@@ -1,0 +1,30 @@
+name: Bug
+description: Κάτι δεν λειτουργεί όπως πρέπει
+title: "[BUG] "
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Τι συμβαίνει
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Βήματα αναπαραγωγής
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Αναμενόμενη συμπεριφορά
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Έκδοση (από /actuator/info)

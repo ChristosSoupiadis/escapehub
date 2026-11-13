@@ -1,0 +1,36 @@
+name: Release
+
+# Τρέχει όταν σπρώχνετε tag τύπου v0.2.0 (Semantic Versioning).
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Έκδοση από το tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+      - name: Build & tests με την έκδοση του tag
+        run: mvn -B -ntp verify -Drevision="$VERSION"
+      - name: Release notes από το CHANGELOG
+        run: |
+          awk -v v="$VERSION" '/^## \[/{p = index($0, "[" v "]") > 0; next} p' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then echo "Δείτε το CHANGELOG.md" > release-notes.md; fi
+      - name: GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: EscapeHub ${{ github.ref_name }}
+          body_path: release-notes.md
+          files: target/escapehub-${{ env.VERSION }}.jar

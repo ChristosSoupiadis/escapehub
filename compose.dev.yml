@@ -1,0 +1,16 @@
+# Μόνο η βάση, για ανάπτυξη από το IntelliJ:
+#   docker compose -f compose.dev.yml up -d
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: escapehub
+      POSTGRES_USER: escapehub
+      POSTGRES_PASSWORD: escapehub
+    ports:
+      - "5432:5432"
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+
+volumes:
+  dev-db-data:
